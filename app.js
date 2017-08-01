@@ -88,7 +88,7 @@ function fetchPresentation(category, presentationLink) {
     var imageLinks = $(".fusion-flexslider img");
     imageLinks.each(function(index, item){
         var imageLink = item.attribs.src;
-        downaloadPresentationImage(imageLink, path);
+        downloadPresentationImage(imageLink, path);
     })
 
 }
@@ -98,7 +98,9 @@ function downloadPresentation(presentationLink, path) {
     try {
         data = res.getBody();
     } catch (error) {
-        console.log("Can't download " + presentationLink);
+        console.error(error);
+        console.log("Retrying download " + presentationLink);
+        downloadPresentation(presentationLink, path);
         return
     }
     
@@ -108,14 +110,16 @@ function downloadPresentation(presentationLink, path) {
 
 }
 
-function downaloadPresentationImage(presentationImageLink, path) {
+function downloadPresentationImage(presentationImageLink, path) {
     
     var res = srequest("GET", presentationImageLink);
     var data;
     try {
         data = res.getBody();
     } catch (error) {
-        console.log("Can't download " + presentationImageLink);
+        console.error(error);
+        console.log("Retrying download " + presentationLink);
+        downloadPresentationImage(presentationLink, path);
         return
     }
     
